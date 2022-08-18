@@ -29,21 +29,13 @@ class _AugmentedPageState extends State<AugmentedPage> {
   void _onArCoreViewCreated(ArCoreController controller) async {
     arCoreController = controller;
     arCoreController?.onTrackingImage = _handleOnTrackingImage;
-    //loadSingleImage();
-    //OR
-    loadImagesDatabase();
+    loadSingleImage();
   }
 
   loadSingleImage() async {
     final ByteData bytes =
         await rootBundle.load('assets/earth_augmented_image.jpg');
     arCoreController?.loadSingleAugmentedImage(
-        bytes: bytes.buffer.asUint8List());
-  }
-
-  loadImagesDatabase() async {
-    final ByteData bytes = await rootBundle.load('assets/myimages.imgdb');
-    arCoreController?.loadAugmentedImagesDatabase(
         bytes: bytes.buffer.asUint8List());
   }
 
@@ -55,11 +47,9 @@ class _AugmentedPageState extends State<AugmentedPage> {
   }
 
   Future _addSphere(ArCoreAugmentedImage augmentedImage) async {
-    final ByteData textureBytes = await rootBundle.load('assets/earth.jpg');
 
     final material = ArCoreMaterial(
       color: Color.fromARGB(120, 66, 134, 244),
-      textureBytes: textureBytes.buffer.asUint8List(),
     );
     final sphere = ArCoreSphere(
       materials: [material],
