@@ -242,6 +242,7 @@ class ArCoreAugmentedImagesView(activity: Activity, context: Context, messenger:
                     val config = Config(session)
                     config.focusMode = Config.FocusMode.AUTO
                     config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+                    config.planeFindingMode = Config.PlaneFindingMode.DISABLED
                     session.configure(config)
                     arSceneView?.setupSession(session)
                 }
@@ -268,6 +269,7 @@ class ArCoreAugmentedImagesView(activity: Activity, context: Context, messenger:
             val config = Config(session)
             config.focusMode = Config.FocusMode.AUTO
             config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+            config.planeFindingMode = Config.PlaneFindingMode.DISABLED
             bytes?.let {
                 if (useSingleImage) {
                     if (!addImageToAugmentedImageDatabase(config, bytes)) {
@@ -293,6 +295,7 @@ class ArCoreAugmentedImagesView(activity: Activity, context: Context, messenger:
             val config = Config(session)
             config.focusMode = Config.FocusMode.AUTO
             config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+            config.planeFindingMode = Config.PlaneFindingMode.DISABLED
             bytesMap?.let {
                 addMultipleImagesToAugmentedImageDatabase(config, bytesMap, session)
             }
@@ -313,13 +316,14 @@ class ArCoreAugmentedImagesView(activity: Activity, context: Context, messenger:
                         augmentedImageDatabase.addImage(key, augmentedImageBitmap)
                     } catch (ex: Exception) {
                         debugLog("Image with the title $key cannot be added to the database. " +
-                        "The exception was thrown: " + ex?.toString())
+                                "The exception was thrown: " + ex?.toString())
                     }
                 }
                 if (augmentedImageDatabase?.getNumImages() == 0) {
                     throw Exception("Could not setup augmented image database")
                 }
                 config.augmentedImageDatabase = augmentedImageDatabase
+                config.planeFindingMode = Config.PlaneFindingMode.DISABLED
                 session.configure(config)
                 arSceneView?.setupSession(session)
             }
@@ -334,6 +338,7 @@ class ArCoreAugmentedImagesView(activity: Activity, context: Context, messenger:
             val augmentedImageDatabase = AugmentedImageDatabase(arSceneView?.session)
             augmentedImageDatabase.addImage("image_name", augmentedImageBitmap)
             config.augmentedImageDatabase = augmentedImageDatabase
+            config.planeFindingMode = Config.PlaneFindingMode.DISABLED
             return true
         } catch (ex:Exception) {
             debugLog(ex.localizedMessage)
@@ -347,6 +352,7 @@ class ArCoreAugmentedImagesView(activity: Activity, context: Context, messenger:
             val inputStream = ByteArrayInputStream(bytes)
             val augmentedImageDatabase = AugmentedImageDatabase.deserialize(arSceneView?.session, inputStream)
             config.augmentedImageDatabase = augmentedImageDatabase
+            config.planeFindingMode = Config.PlaneFindingMode.DISABLED
             true
         } catch (e: IOException) {
             Log.e(TAG, "IO exception loading augmented image database.", e)
@@ -356,8 +362,8 @@ class ArCoreAugmentedImagesView(activity: Activity, context: Context, messenger:
 
     private fun loadAugmentedImageBitmap(bitmapdata: ByteArray): Bitmap? {
         debugLog( "loadAugmentedImageBitmap")
-       try {
-           return  BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.size)
+        try {
+            return  BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.size)
         } catch (e: Exception) {
             Log.e(TAG, "IO exception loading augmented image bitmap.", e)
             return  null
