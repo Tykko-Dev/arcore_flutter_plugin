@@ -3,31 +3,29 @@ import 'package:arcore_flutter_plugin/src/arcore_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-typedef void ArCoreViewCreatedCallback(ArCoreController controller);
+typedef ArCoreViewCreatedCallback = void Function(ArCoreController controller);
 
 enum ArCoreViewType { AUGMENTEDFACE, STANDARDVIEW, AUGMENTEDIMAGES }
 
 class ArCoreView extends StatefulWidget {
-  final ArCoreViewCreatedCallback onArCoreViewCreated;
-
-//  final UnsupportedHandler onArCoreUnsupported;
-
-  final bool enableTapRecognizer;
-  final bool enablePlaneRenderer;
-  final bool enableUpdateListener;
-  final bool debug;
-  final ArCoreViewType type;
 
   const ArCoreView(
       {Key? key,
       required this.onArCoreViewCreated,
-//    @required this.onArCoreUnsupported,
       this.enableTapRecognizer = false,
       this.enablePlaneRenderer = true,
       this.enableUpdateListener = false,
       this.type = ArCoreViewType.STANDARDVIEW,
       this.debug = false})
       : super(key: key);
+  final ArCoreViewCreatedCallback onArCoreViewCreated;
+
+
+  final bool enableTapRecognizer;
+  final bool enablePlaneRenderer;
+  final bool enableUpdateListener;
+  final bool debug;
+  final ArCoreViewType type;
 
   @override
   _ArCoreViewState createState() => _ArCoreViewState();
@@ -43,13 +41,11 @@ class _ArCoreViewState extends State<ArCoreView> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return Container(
-        child: ArCoreAndroidView(
-          viewType: 'arcore_flutter_plugin',
-          onPlatformViewCreated: _onPlatformViewCreated,
-          arCoreViewType: widget.type,
-          debug: widget.debug,
-        ),
+      return ArCoreAndroidView(
+        viewType: 'arcore_flutter_plugin',
+        onPlatformViewCreated: _onPlatformViewCreated,
+        arCoreViewType: widget.type,
+        debug: widget.debug,
       );
     }
     return Center(
@@ -64,7 +60,6 @@ class _ArCoreViewState extends State<ArCoreView> with WidgetsBindingObserver {
       enableTapRecognizer: widget.enableTapRecognizer,
       enableUpdateListener: widget.enableUpdateListener,
       enablePlaneRenderer: widget.enablePlaneRenderer,
-//      onUnsupported: widget.onArCoreUnsupported,
     ));
   }
 

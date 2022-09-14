@@ -5,10 +5,6 @@ import 'package:flutter/services.dart';
 typedef PlatformViewCreatedCallback = void Function(int id);
 
 class ArCoreAndroidView extends AndroidView {
-  final String viewType;
-  final PlatformViewCreatedCallback? onPlatformViewCreated;
-  final ArCoreViewType arCoreViewType;
-  final bool debug;
 
   ArCoreAndroidView(
       {Key? key,
@@ -29,4 +25,9 @@ class ArCoreAndroidView extends AndroidView {
           },
           creationParamsCodec: const StandardMessageCodec(),
         );
+
+  final String viewType;
+  final PlatformViewCreatedCallback? onPlatformViewCreated;
+  final ArCoreViewType arCoreViewType;
+  final bool debug;
 }
