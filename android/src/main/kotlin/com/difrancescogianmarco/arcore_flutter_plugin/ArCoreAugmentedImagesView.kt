@@ -336,7 +336,7 @@ class ArCoreAugmentedImagesView(activity: Activity, context: Context, messenger:
         try {
             val augmentedImageBitmap = loadAugmentedImageBitmap(bytes) ?: return false
             val augmentedImageDatabase = AugmentedImageDatabase(arSceneView?.session)
-            augmentedImageDatabase.addImage("image_name", augmentedImageBitmap)
+            augmentedImageDatabase.addImage("image_name", augmentedImageBitmap, 1.0f)
             config.augmentedImageDatabase = augmentedImageDatabase
             config.planeFindingMode = Config.PlaneFindingMode.DISABLED
             return true
